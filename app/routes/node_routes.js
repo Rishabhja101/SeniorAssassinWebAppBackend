@@ -24,8 +24,8 @@ module.exports = function(app, db) {
     });
 
     //delete participant
-    app.delete('/participants/:name', (req, res) => {
-        const name = req.params.name.toLowerCase();
+    app.delete('/participants/delete/:name', (req, res) => {
+        const name = req.params.name;
 
         db.collection('participants').deleteOne({name: name}, (err, item) => {
             if (err){
@@ -37,12 +37,12 @@ module.exports = function(app, db) {
     });
 
     //update participant
-    app.put('/participants/:name', (req, res) => {
-        const name = req.params.name.toLowerCase();
-        const target = req.params.target;
+    app.put('/participants/update', (req, res) => {
+        const name = req.body.name;
+        const target = req.body.target;
         const person = { 
             name: name,
-            title: target
+            target: target
         };
 
         db.collection('participants').update({name: name}, person, (err, item) => {
@@ -55,7 +55,7 @@ module.exports = function(app, db) {
     });
     
     // Add Participant
-    app.post("/participants", (req, res) => {
+    app.post("/participants/add", (req, res) => {
         const person = {
             name: req.body.name,
             target: ''
