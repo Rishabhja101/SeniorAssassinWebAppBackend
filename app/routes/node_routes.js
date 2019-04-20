@@ -38,8 +38,8 @@ module.exports = function(app, db) {
 
     //update participant
     app.put('/participants/update', (req, res) => {
-        const name = req.body.name;
-        const target = req.body.target;
+        const name = req.body.name.toLowerCase();
+        const target = req.body.target.toLowerCase();
         const person = { 
             name: name,
             target: target
@@ -57,7 +57,7 @@ module.exports = function(app, db) {
     // Add Participant
     app.post("/participants/add", (req, res) => {
         const person = {
-            name: req.body.name,
+            name: req.body.name.toLowerCase(),
             target: ''
         };
 
