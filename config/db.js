@@ -1,4 +1,4 @@
 module.exports = {
-    url : ""// <-- TODO: put the url in there for mongo db
+    url : "mongodb+srv://assassinadmin:assassADMIN12@seniorassassin-nlpqq.mongodb.net/test?retryWrites=true"
 
 }
