@@ -1,3 +1,5 @@
+const Cryptr = require('cryptr');
+
 module.exports = function(app, db) {
     //get all participants
     app.get("/participants", (req, res) => {
@@ -39,17 +41,33 @@ module.exports = function(app, db) {
     //update participant
     app.put('/participants/update', (req, res) => {
         const name = req.body.name.toLowerCase();
-        const target = req.body.target.toLowerCase();
-        const person = { 
-            name: name,
-            target: target
-        };
+        let target = req.body.target.toLowerCase();
 
-        db.collection('participants').update({name: name}, person, (err, item) => {
-            if (err){
-                res.send({ 'error': 'An error has occured' });
-            } else{
-                res.send(item);
+        //handle encryption
+        db.collection('encryption').find( {} ).toArray((err, item) => {
+            if(err){
+                console.log({'error': 'an error has occurred with secret key'});
+            } else {
+                
+                const secretKey = item[0]['secretKey'];
+                const cryptr = new Cryptr(secretKey);
+
+                target = cryptr.encrypt(target);
+                console.log(target);
+                console.log(cryptr.decrypt(target))
+
+                const person = { 
+                    name: name,
+                    target: target
+                };
+        
+                db.collection('participants').update({name: name}, person, (err, item) => {
+                    if (err){
+                        res.send({ 'error': 'An error has occured' });
+                    } else{
+                        res.send(item);
+                    }
+                });
             }
         });
     });
